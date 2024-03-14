@@ -1,0 +1,231 @@
+{% extends "bankinginthelab/Base.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block content %}
+
+
+<style>
+html{
+    width:100%;
+    height:100%;
+}
+body{
+    width:100%;
+    height:100%;
+    {#background-color:#DDD;#}
+}
+</style>
+
+
+<div class="container" style="display: flex; height: auto; flex-wrap: wrap ; border: thin solid black;">
+    <div style="width: 33.33%;">
+        <strong><font size="+6">ROUND {{now}}</font></strong>
+    </div>
+
+    <div style="width: 33.33%;" align="center">
+        <strong><font size="+3">STAGE 1 - OUTCOME</font></strong>
+    </div>
+
+    <div style="width: 33.33%;" align="right">
+        <strong><font size="+3">YOUR ROLE: TYPE {{type}}</font></strong>
+    </div>
+</div>
+
+<br>
+<div class="container" style="display: flex; height: auto; flex-wrap: wrap">
+    <div style="width: 49%; background: ; border: thin solid black;">
+<!--        <center> <strong>Last round's partnership information (round {{yesterday}})</strong> </center>-->
+<!--        <br>-->
+<!--                   <center>-->
+<!--                       <style>-->
+<!--                            table, th, td {-->
+<!--                              {#border: 1px solid black;#}-->
+<!--                              border-collapse: collapse;font-size: 21px; table-layout:fixed;overflow-x: auto;-->
+<!--                            }-->
+<!--                            th:nth-child(odd), td:nth-child(odd) {-->
+<!--                              background-color: #D6EEEE;-->
+<!--                            }-->
+<!--                            table{table-layout:fixed; width:90%;}-->
+<!--                            style='text-align:center; vertical-align:middle';-->
+
+<!--                       </style> {{ history_table }}-->
+<!--                   </center>-->
+<!--        <br>-->
+<!--        <br>-->
+<!--        <br>-->
+        <br>
+        <br>
+        <center> <strong>Historical Average Round Points</strong> </center>
+                    <center>
+                        <div>
+                            <figure class="highcharts-figure">
+                                    <div id="history_average_scores"></div>
+                                    <p class="highcharts-description">
+                                        </p>
+                                        </figure>
+                        </div>
+                    </center>
+        <br>
+        <br>
+    </div>
+
+    <div style="width: 2%;">
+
+    </div>
+
+    <div style="width: 49%; background: ;">
+        <div style="border: thin solid black">
+            <strong>STAGE 1 SUMMARY</strong>
+            <br>
+            {% if stage1_outcome == 1 %}
+            Both you and your partner accept the recommendation.
+            <br>
+            <br>
+                {% if type == 2 %}
+            You <u>produced and transferred</u> good <strong>X</strong> to your partner. Your partner <u>produced and invested</u> good <strong>Y</strong> for you.
+                {% endif %}
+                {% if type == 1 %}
+            You <u>produced and invested</u> good <strong>Y</strong> for your partner. Your partner <u>produced and transferred</u> good <strong>X</strong> to you; you therefore earn a total of <strong>{{score}}</strong> points in this stage.
+                {% endif %}
+            {% endif %}
+            {% if stage1_outcome == 0 %}
+                There is no trade in this round as at least one partner does not accept the proposed action.
+            {% endif %}
+            <br>
+            <br>
+            {% if stage1_outcome == 1 %}
+                {% if type == 1 %}
+                    In stage 2, you will transfer your production to your partner.
+                {% endif %}
+                {% if type == 2 %}
+                    In stage 2, your partner will transfer their production to you.
+                {% endif %}
+            {% endif %}
+<!--            {% if stage1_outcome != 1 %}-->
+<!--                This round then does not have stage 2.-->
+<!--            {% endif %}-->
+
+
+
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            {% if stage1_outcome == 1 %}
+                {% if type == 1 %}
+                    Click next to move to stage 2.
+                {% endif %}
+                {% if type == 2 %}
+                    Click next to move to the outcome of this round.
+                {% endif %}
+            {% endif %}
+            {% if stage1_outcome != 1 %}
+                Click next to move to outcome of this round.
+            {% endif %}
+            {{ next_button }}
+
+        </div>
+        <div style="border: thin solid black">
+            <div class="container" style="display: flex; height: auto; flex-wrap: wrap">
+                <div style="width: 50%; background: ;">
+                    POINTS EARNED THIS ROUND: <strong>{{score}}</strong>
+                </div>
+                <div style="width: 50%; background: ;">
+                    POINTS EARNED SO FAR: <strong>{{cum_score}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+</body>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script type="text/javascript">
+    Highcharts.chart('history_average_scores', {
+    title: {
+        text: ''
+    },
+    subtitle: {
+        text: ''
+    },
+    yAxis: {
+        title: {
+            text: ''
+        },
+        // max: {{C.MAX_SCORE}},
+        //     min: {{0}}
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle',
+        floating: true
+    },
+    plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false,
+                enabled: false,
+            },
+            pointStart: 0
+        }
+    },
+    xAxis: {
+            allowDecimals: false,
+            max: {{C.MAX_ROUND}},
+            min: {{1}},
+            title: {text: 'Round' },
+            scrollbar: {
+                enabled: true},
+            },
+    series: [
+        {
+        name: 'Type 1 Average Round Points',
+        data: {{type1_average_scores}},
+                marker:{enabled: true,radius: 5},lineWidth:1,dashStyle:'Dash',color:'blue',type: 'line',showInLegend: true,
+        },
+        {
+        name: 'Type 2 Average Round Points',
+        data: {{type2_average_score}},
+                marker:{enabled: true,radius: 5},lineWidth:1,dashStyle:'Dash',color:'red',type: 'line',showInLegend: true,
+        },
+    ],
+
+    responsive: {
+        rules: [{condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+</script>
+
+{% endblock %}

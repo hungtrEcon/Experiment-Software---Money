@@ -1,0 +1,30 @@
+{{ block title }}YOUR ROLE{{ endblock }}
+{{ block content }}
+
+
+{% if type == 1 %}
+Your role is <strong>type {{type}}</strong>. You will remain <strong>type {{type}}</strong> for the entire duration of the experiment. In each round, you will be randomly matched with a partner of <strong>type 2</strong>.
+<br>
+<br>
+Recall that you earn points by consuming <strong>good X</strong> that your partner can produce, and your partner can earn points by consuming <strong>good Y</strong> that you can produce.
+{% endif %}
+{% if type == 2 %}
+Your role is <strong>type {{type}}</strong>. You will remain <strong>type {{type}}</strong> for the entire duration of the experiment. In each round, you will be randomly matched with a partner of <strong>type 1</strong>.
+<br>
+<br>
+Recall that you earn points by consuming <strong>good Y</strong> that your partner can produce, and your partner can earn points by consuming <strong>good X</strong> that you can produce.
+{% endif %}
+
+<br>
+<br>
+<br>
+Recall the experiment lasts for an indeterminate number of rounds as described in the instructions.
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% next_button %}
+
+{{ endblock }}

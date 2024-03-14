@@ -1,0 +1,28 @@
+{% extends "bankinginthelab/Base.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block content %}
+
+
+<style>
+html{
+    width:100%;
+    height:100%;
+}
+body{
+    width:100%;
+    height:100%;
+    {#background-color:#DDD;#}
+}
+</style>
+
+<strong><font size="+3">Thank you! This sequence has ended.</font></strong>
+<br>
+<br>
+You earn a total score of {{cum_score}}, which is CAD <strong>${{payoff}}</strong>. Please input this amount into the payment form.
+
+
+
+</body>
+{% endblock %}
